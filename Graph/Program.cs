@@ -9,7 +9,7 @@ namespace Graph
         {
             var Town = new Graph("Bury St Edmunds", "Stowmarket", "Ipswitch", "Framlingham", "Wickham Market",
                 "Woodbridge");
-            Town.getLink("Stowmarket", "Ipswitch");
+            Town.getConnections("Stowmarket");
         }
     }
 
@@ -28,7 +28,7 @@ namespace Graph
             _graphNames[4] = node5;
             _graphNames[5] = node6;
 
-            // Populates Graph
+            // Populate Graph
             createConnection("Bury St Edmunds", "Stowmarket", 25);
             createConnection("Bury St Edmunds", "Ipswitch", 45);
             createConnection("Bury St Edmunds", "Woodbridge", 56);
@@ -40,6 +40,20 @@ namespace Graph
             createConnection("Framlingham", "Wickham Market", 9);
         }
 
+        public void getConnections(string nodeName)
+        {
+            Console.WriteLine($"The town of {nodeName} has the following connections:");
+            for (var i = 0; i < _graphNames.Length; i++)
+            {
+                if (getLink(nodeName, _graphNames[i]) != 0 && getLink(nodeName, _graphNames[i]) != -1) // assuming that no connections have a distance of 0
+                {
+                    Console.WriteLine($"{_graphNames[i]}:\t {getLink(nodeName, _graphNames[i])}");
+                }
+                
+            }
+        }
+
+
         private int getIndex(string nodeName)
         {
             for (var i = 0; i < _graphNames.Length; i++)
@@ -48,7 +62,7 @@ namespace Graph
             return -1; // Shows if the input is not in the array
         }
 
-        public int getLink(string nodeName1, string nodeName2)
+        private int getLink(string nodeName1, string nodeName2)
         {
             if (getIndex(nodeName1) == getIndex(nodeName2))
             {
@@ -57,7 +71,6 @@ namespace Graph
             else
             {
                 tempVariable = _graphNodes[getIndex(nodeName1), getIndex(nodeName2)];
-                Console.WriteLine($"{nodeName1} to {nodeName2} = {tempVariable}");
                 return tempVariable;
             }
         }
