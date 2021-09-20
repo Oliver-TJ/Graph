@@ -45,14 +45,13 @@ namespace Graph
             Console.WriteLine($"The town of {nodeName} has the following connections:");
             for (var i = 0; i < _graphNames.Length; i++)
             {
-                if (getLink(nodeName, _graphNames[i]) != 0 && getLink(nodeName, _graphNames[i]) != -1) // assuming that no connections have a distance of 0
+                if (getLink(nodeName, _graphNames[i]) != 0 &&
+                    getLink(nodeName, _graphNames[i]) != -1) // assuming that no connections have a distance of 0
                 {
-                    Console.WriteLine($"{_graphNames[i]}:\t {getLink(nodeName, _graphNames[i])}");
+                    Console.WriteLine($"{_graphNames[i]}:\t {_graphNodes[getIndex(nodeName), i]}");
                 }
-                
             }
         }
-
 
         private int getIndex(string nodeName)
         {
