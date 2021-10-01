@@ -2,14 +2,14 @@
 using System.Linq;
 
 namespace Graph
-{
+{ 
     internal class Program
     {
         private static void Main(string[] args)
         {
             var Town = new Graph("Bury St Edmunds", "Stowmarket", "Ipswitch", "Framlingham", "Wickham Market",
                 "Woodbridge");
-            Town.getConnections("Stowmarket");
+            Town.getConnections("Ipswitch");
         }
     }
 
@@ -18,7 +18,7 @@ namespace Graph
         private int[,] _graphNodes = new int[6, 6];
         private string[] _graphNames = new string[6];
         private int tempVariable;
-
+        // need to add search function
         public Graph(string node1, string node2, string node3, string node4, string node5, string node6)
         {
             _graphNames[0] = node1;
@@ -39,6 +39,51 @@ namespace Graph
             createConnection("Woodbridge", "Wickham Market", 9);
             createConnection("Framlingham", "Wickham Market", 9);
         }
+        
+        public void userChoice()
+        {
+            Console.WriteLine("Main Menu:");
+            Console.WriteLine("1. Choose two places and find the shortest distance between them");
+            Console.WriteLine("2. Choose one place and show all connections to it");
+            string ans = Console.ReadLine();
+            if (ans == "1")
+                search();
+            else if (ans == "2")
+                getItemForDisplay();
+            else
+                Console.WriteLine("ERROR - Please enter 1 or 2 (run the program again)");
+        }
+
+        private void getItemForDisplay()
+        {}
+        
+        
+
+        private void search()
+        {
+            Console.WriteLine("Please enter the first town");
+            string t1 = Console.ReadLine();
+            Console.WriteLine("Please enter the second town");
+            string t2 = Console.ReadLine();
+            int lowest = 100; // larger than any in the list
+            if (getLink(t1, t2) < lowest)
+            {
+                lowest = getLink(t1, t2);
+            }
+            for (var i = 0; i < _graphNames.Length; i++)
+            {
+                if (getLink(t1, i) < lowest)
+                {
+                    for (var g = 0; g < _graphNames.Length; i++)
+                    {
+                        
+                    }
+                }
+                
+            }
+        }
+
+
 
         public void getConnections(string nodeName)
         {
