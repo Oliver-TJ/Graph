@@ -9,7 +9,8 @@ namespace Graph
         {
             var Town = new Graph("Bury St Edmunds", "Stowmarket", "Ipswitch", "Framlingham", "Wickham Market",
                 "Woodbridge");
-            Town.getConnections("Ipswitch");
+            Town.userChoice();
+            // Town.getConnections("Ipswitch");
         }
     }
 
@@ -66,22 +67,47 @@ namespace Graph
             Console.WriteLine("Please enter the second town");
             string t2 = Console.ReadLine();
             int lowest = 100; // larger than any in the list
+            int connections = 0;
+            string c1;
+            string c2;
             if (getLink(t1, t2) < lowest)
             {
                 lowest = getLink(t1, t2);
+                connections = 1;
             }
             for (var i = 0; i < _graphNames.Length; i++)
             {
-                if (getLink(t1, i) < lowest)
+                if (getLink(t1, _graphNames[i]) < lowest && getLink(t1, _graphNames[i]) != -1)
                 {
+                    c1 = _graphNames[i];
                     for (var g = 0; g < _graphNames.Length; i++)
                     {
-                        
+                        if ((getLink(_graphNames[g], t2) != -1) && (getLink(t1, _graphNames[i])+getLink(_graphNames[g], t2))<lowest)
+                        { 
+                            lowest = getLink(_graphNames[i], t2)+getLink(_graphNames[i], t2);
+                            connections = 2;
+                            c2 = _graphNames[g];
+                        }
                     }
                 }
+            }
+
+            if (connections == 1)
+            {
+                Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
+                Console.WriteLine($"Get the train from {t1} to {c1} which takes {getLink(t1, c1)}");
+                Console.WriteLine($"The overall time is {getLink(t1, c1)+getLink(c1, t2)}");
+            }
+
+            if (connections == 2)
+            {
                 
             }
+            Console.WriteLine($"Then get the train from {_graphNames[i]} to {t2} which takes {getLink(_graphNames[i], t2)}");
+            Console.WriteLine($"The overall time is {getLink(t1, _graphNames[i])+getLink(_graphNames[i], t2)}");
         }
+
+        
 
 
 
