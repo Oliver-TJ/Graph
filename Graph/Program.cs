@@ -7,9 +7,9 @@ namespace Graph
     {
         private static void Main(string[] args)
         {
-            var Town = new Graph("Bury St Edmunds", "Stowmarket", "Ipswitch", "Framlingham", "Wickham Market",
+            var town = new Graph("Bury St Edmunds", "Stowmarket", "Ipswitch", "Framlingham", "Wickham Market",
                 "Woodbridge");
-            Town.userChoice();
+            town.UserChoice();
             // Town.getConnections("Ipswitch");
         }
     }
@@ -18,8 +18,8 @@ namespace Graph
     {
         private int[,] _graphNodes = new int[6, 6];
         private string[] _graphNames = new string[6];
-        private int tempVariable;
-        // need to add search function
+        private int _tempVariable;
+        // -- need to add search function --
         public Graph(string node1, string node2, string node3, string node4, string node5, string node6)
         {
             _graphNames[0] = node1;
@@ -30,37 +30,37 @@ namespace Graph
             _graphNames[5] = node6;
 
             // Populate Graph
-            createConnection("Bury St Edmunds", "Stowmarket", 25);
-            createConnection("Bury St Edmunds", "Ipswitch", 45);
-            createConnection("Bury St Edmunds", "Woodbridge", 56);
-            createConnection("Bury St Edmunds", "Framlingham", 57);
-            createConnection("Ipswitch", "Stowmarket", 21);
-            createConnection("Ipswitch", "Framlingham", 31);
-            createConnection("Ipswitch", "Woodbridge", 15);
-            createConnection("Woodbridge", "Wickham Market", 9);
-            createConnection("Framlingham", "Wickham Market", 9);
+            CreateConnection("Bury St Edmunds", "Stowmarket", 25);
+            CreateConnection("Bury St Edmunds", "Ipswitch", 45);
+            CreateConnection("Bury St Edmunds", "Woodbridge", 56);
+            CreateConnection("Bury St Edmunds", "Framlingham", 57);
+            CreateConnection("Ipswitch", "Stowmarket", 21);
+            CreateConnection("Ipswitch", "Framlingham", 31);
+            CreateConnection("Ipswitch", "Woodbridge", 15);
+            CreateConnection("Woodbridge", "Wickham Market", 9);
+            CreateConnection("Framlingham", "Wickham Market", 9);
         }
         
-        public void userChoice()
+        public void UserChoice()
         {
             Console.WriteLine("Main Menu:");
             Console.WriteLine("1. Choose two places and find the shortest distance between them");
             Console.WriteLine("2. Choose one place and show all connections to it");
             string ans = Console.ReadLine();
             if (ans == "1")
-                search();
+                Search();
             else if (ans == "2")
-                getItemForDisplay();
+                GetItemForDisplay();
             else
                 Console.WriteLine("ERROR - Please enter 1 or 2 (run the program again)");
         }
 
-        private void getItemForDisplay()
+        private void GetItemForDisplay()
         {}
-        
-        
 
-        private void search()
+
+
+        private void Search() // Searches for the fastest route between two stations
         {
             Console.WriteLine("Please enter the first town");
             string t1 = Console.ReadLine();
@@ -68,63 +68,81 @@ namespace Graph
             string t2 = Console.ReadLine();
             int lowest = 100; // larger than any in the list
             int connections = 0;
-            string c1;
-            string c2;
-            if (getLink(t1, t2) < lowest)
+            string c1 = "h"; // Throws an error if they are not changed
+                             // -- need to fix --
+            string c2 = "g";
+            
+            if (GetLink(t1, t2) < lowest && GetLink(t1, t2) != -1)
             {
-                lowest = getLink(t1, t2);
-                connections = 1;
+                lowest = GetLink(t1, t2);
+                connections = 0;
             }
+
             for (var i = 0; i < _graphNames.Length; i++)
             {
-                if (getLink(t1, _graphNames[i]) < lowest && getLink(t1, _graphNames[i]) != -1)
+                if (GetLink(t1, _graphNames[i]) < lowest && GetLink(t1, _graphNames[i]) != -1)
                 {
                     c1 = _graphNames[i];
+                    connections = 1;
                     for (var g = 0; g < _graphNames.Length; i++)
                     {
-                        if ((getLink(_graphNames[g], t2) != -1) && (getLink(t1, _graphNames[i])+getLink(_graphNames[g], t2))<lowest)
-                        { 
-                            lowest = getLink(_graphNames[i], t2)+getLink(_graphNames[i], t2);
+                        connections = 1;
+                        if ((GetLink(_graphNames[g], t2) != -1) &&
+                            (GetLink(t1, _graphNames[i]) + GetLink(_graphNames[g], t2)) < lowest)
+                        {
+                            lowest = GetLink(_graphNames[i], t2) + GetLink(_graphNames[i], t2);
                             connections = 2;
                             c2 = _graphNames[g];
+                            break;
                         }
                     }
                 }
-            }
+            
 
-            if (connections == 1)
-            {
-                Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
-                Console.WriteLine($"Get the train from {t1} to {c1} which takes {getLink(t1, c1)}");
-                Console.WriteLine($"The overall time is {getLink(t1, c1)+getLink(c1, t2)}");
-            }
+                if (connections == 1)
+                {
+                    Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
+                    Console.WriteLine($"Get the train from {t1} to {c1} which takes {GetLink(t1, c1)}");
+                    Console.WriteLine($"Then get the train from {c1} to {t2} which takes {GetLink(c1, t2)}");
+                    Console.WriteLine($"The overall time is {GetLink(t1, c1) + GetLink(c1, t2)}");
+                    break;
+                }
+                if (connections == 2)
+                {
+                    Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
+                    Console.WriteLine($"Get the train from {t1} to {c1} which takes {GetLink(t1, c1)}");
+                    Console.WriteLine($"Then get the train from {c1} to {c2} which takes {GetLink(c1, c2)}");
+                    Console.WriteLine($"The overall time is {GetLink(t1, c1) + GetLink(c1, c2) + GetLink(c2, t2)}");
+                    break;
+                }
 
-            if (connections == 2)
-            {
-                
+                if (connections == 0)
+                {
+                    Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
+                    Console.WriteLine($"Get the train from {t1} to {t2} which takes {GetLink(t1, t2)} minutes in total");
+                    break;
+                }
             }
-            Console.WriteLine($"Then get the train from {_graphNames[i]} to {t2} which takes {getLink(_graphNames[i], t2)}");
-            Console.WriteLine($"The overall time is {getLink(t1, _graphNames[i])+getLink(_graphNames[i], t2)}");
         }
 
         
 
 
 
-        public void getConnections(string nodeName)
+        public void GetConnections(string nodeName)
         {
             Console.WriteLine($"The town of {nodeName} has the following connections:");
             for (var i = 0; i < _graphNames.Length; i++)
             {
-                if (getLink(nodeName, _graphNames[i]) != 0 &&
-                    getLink(nodeName, _graphNames[i]) != -1) // assuming that no connections have a distance of 0
+                if (GetLink(nodeName, _graphNames[i]) != 0 &&
+                    GetLink(nodeName, _graphNames[i]) != -1) // assuming that no connections have a distance of 0
                 {
-                    Console.WriteLine($"{_graphNames[i]}:\t {_graphNodes[getIndex(nodeName), i]}");
+                    Console.WriteLine($"{_graphNames[i]}:\t {_graphNodes[GetIndex(nodeName), i]}");
                 }
             }
         }
 
-        private int getIndex(string nodeName)
+        private int GetIndex(string nodeName)
         {
             for (var i = 0; i < _graphNames.Length; i++)
                 if (nodeName == _graphNames[i])
@@ -132,23 +150,23 @@ namespace Graph
             return -1; // Shows if the input is not in the array
         }
 
-        private int getLink(string nodeName1, string nodeName2)
+        private int GetLink(string nodeName1, string nodeName2)
         {
-            if (getIndex(nodeName1) == getIndex(nodeName2))
+            if (GetIndex(nodeName1) == GetIndex(nodeName2))
             {
                 return -1;
             }
             else
             {
-                tempVariable = _graphNodes[getIndex(nodeName1), getIndex(nodeName2)];
-                return tempVariable;
+                _tempVariable = _graphNodes[GetIndex(nodeName1), GetIndex(nodeName2)];
+                return _tempVariable;
             }
         }
 
-        public void createConnection(string _node1, string _node2, int linkValue)
+        public void CreateConnection(string node1, string node2, int linkValue)
         {
-            _graphNodes[getIndex(_node1), getIndex(_node2)] = linkValue;
-            _graphNodes[getIndex(_node2), getIndex(_node1)] = linkValue;
+            _graphNodes[GetIndex(node1), GetIndex(node2)] = linkValue;
+            _graphNodes[GetIndex(node2), GetIndex(node1)] = linkValue;
         }
     }
 }
