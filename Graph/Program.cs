@@ -46,7 +46,7 @@ namespace Graph
             Console.WriteLine("Main Menu:");
             Console.WriteLine("1. Choose two places and find the shortest distance between them");
             Console.WriteLine("2. Choose one place and show all connections to it");
-            string ans = Console.ReadLine();
+            var ans = Console.ReadLine();
             if (ans == "1")
                 Search();
             else if (ans == "2")
@@ -56,7 +56,11 @@ namespace Graph
         }
 
         private void GetItemForDisplay()
-        {}
+        {
+            Console.WriteLine("Enter the town:  ");
+            string townEntry = Console.ReadLine();
+            GetConnections(townEntry);
+        }
 
 
 
@@ -66,11 +70,11 @@ namespace Graph
             string t1 = Console.ReadLine();
             Console.WriteLine("Please enter the second town");
             string t2 = Console.ReadLine();
-            int lowest = 100; // larger than any in the list
-            int connections = 0;
-            string c1 = "h"; // Throws an error if they are not changed
+            var lowest = 100; // larger than any in the list
+            var connections = 0;
+            var c1 = "h"; // Throws an error if they are not changed
                              // -- need to fix --
-            string c2 = "g";
+            var c2 = "g";
             
             if (GetLink(t1, t2) < lowest && GetLink(t1, t2) != -1)
             {
@@ -86,9 +90,8 @@ namespace Graph
                     connections = 1;
                     for (var g = 0; g < _graphNames.Length; i++)
                     {
-                        connections = 1;
-                        if ((GetLink(_graphNames[g], t2) != -1) &&
-                            (GetLink(t1, _graphNames[i]) + GetLink(_graphNames[g], t2)) < lowest)
+                        if (GetLink(_graphNames[g], t2) != -1 &&
+                            GetLink(t1, _graphNames[i]) + GetLink(_graphNames[g], t2) < lowest)
                         {
                             lowest = GetLink(_graphNames[i], t2) + GetLink(_graphNames[i], t2);
                             connections = 2;
@@ -133,13 +136,9 @@ namespace Graph
         {
             Console.WriteLine($"The town of {nodeName} has the following connections:");
             for (var i = 0; i < _graphNames.Length; i++)
-            {
                 if (GetLink(nodeName, _graphNames[i]) != 0 &&
                     GetLink(nodeName, _graphNames[i]) != -1) // assuming that no connections have a distance of 0
-                {
                     Console.WriteLine($"{_graphNames[i]}:\t {_graphNodes[GetIndex(nodeName), i]}");
-                }
-            }
         }
 
         private int GetIndex(string nodeName)
@@ -156,11 +155,8 @@ namespace Graph
             {
                 return -1;
             }
-            else
-            {
-                _tempVariable = _graphNodes[GetIndex(nodeName1), GetIndex(nodeName2)];
-                return _tempVariable;
-            }
+            _tempVariable = _graphNodes[GetIndex(nodeName1), GetIndex(nodeName2)];
+            return _tempVariable;
         }
 
         public void CreateConnection(string node1, string node2, int linkValue)
