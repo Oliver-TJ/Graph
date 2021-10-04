@@ -10,7 +10,6 @@ namespace Graph
             var town = new Graph("Bury St Edmunds", "Stowmarket", "Ipswitch", "Framlingham", "Wickham Market",
                 "Woodbridge");
             town.UserChoice();
-            // Town.getConnections("Ipswitch");
         }
     }
 
@@ -132,7 +131,7 @@ namespace Graph
 
 
 
-        public void GetConnections(string nodeName)
+        private void GetConnections(string nodeName)
         {
             Console.WriteLine($"The town of {nodeName} has the following connections:");
             for (var i = 0; i < _graphNames.Length; i++)
