@@ -74,8 +74,11 @@ namespace Graph
             var c1 = "h"; // Throws an error if they are not changed
                              // -- need to fix --
             var c2 = "g";
+            Console.WriteLine(GetLink(t1, t2));
             
-            if (GetLink(t1, t2) < lowest && GetLink(t1, t2) != -1)
+            if (GetLink(t1, t2) < lowest 
+                && GetLink(t1, t2) != -1 
+                && GetLink(t1, t2) != 0)
             {
                 lowest = GetLink(t1, t2);
                 connections = 0;
@@ -83,14 +86,17 @@ namespace Graph
 
             for (var i = 0; i < _graphNames.Length; i++)
             {
-                if (GetLink(t1, _graphNames[i]) < lowest && GetLink(t1, _graphNames[i]) != -1)
+                if (GetLink(t1, _graphNames[i]) < lowest
+                    && GetLink(t1, _graphNames[i]) != -1
+                    && GetLink(t1, _graphNames[i]) != 0)
                 {
                     c1 = _graphNames[i];
                     connections = 1;
                     for (var g = 0; g < _graphNames.Length; i++)
                     {
-                        if (GetLink(_graphNames[g], t2) != -1 &&
-                            GetLink(t1, _graphNames[i]) + GetLink(_graphNames[g], t2) < lowest)
+                        if (GetLink(_graphNames[g], t2) != -1 
+                            && GetLink(t1, _graphNames[i]) + GetLink(_graphNames[g], t2) < lowest
+                            && GetLink(_graphNames[g], t2) != 0)
                         {
                             lowest = GetLink(_graphNames[i], t2) + GetLink(_graphNames[i], t2);
                             connections = 2;
@@ -99,32 +105,32 @@ namespace Graph
                         }
                     }
                 }
-            
-
-                if (connections == 1)
-                {
-                    Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
-                    Console.WriteLine($"Get the train from {t1} to {c1} which takes {GetLink(t1, c1)}");
-                    Console.WriteLine($"Then get the train from {c1} to {t2} which takes {GetLink(c1, t2)}");
-                    Console.WriteLine($"The overall time is {GetLink(t1, c1) + GetLink(c1, t2)}");
-                    break;
-                }
-                if (connections == 2)
-                {
-                    Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
-                    Console.WriteLine($"Get the train from {t1} to {c1} which takes {GetLink(t1, c1)}");
-                    Console.WriteLine($"Then get the train from {c1} to {c2} which takes {GetLink(c1, c2)}");
-                    Console.WriteLine($"The overall time is {GetLink(t1, c1) + GetLink(c1, c2) + GetLink(c2, t2)}");
-                    break;
-                }
-
-                if (connections == 0)
-                {
-                    Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
-                    Console.WriteLine($"Get the train from {t1} to {t2} which takes {GetLink(t1, t2)} minutes in total");
-                    break;
-                }
             }
+
+            if (connections == 1 
+                && lowest != 100)
+            {
+                Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
+                Console.WriteLine($"Get the train from {t1} to {c1} which takes {GetLink(t1, c1)}");
+                Console.WriteLine($"Then get the train from {c1} to {t2} which takes {GetLink(c1, t2)}");
+                Console.WriteLine($"The overall time is {GetLink(t1, c1) + GetLink(c1, t2)}");
+            }
+            if (connections == 2 
+                && lowest != 100)
+            {
+                Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
+                Console.WriteLine($"Get the train from {t1} to {c1} which takes {GetLink(t1, c1)}");
+                Console.WriteLine($"Then get the train from {c1} to {c2} which takes {GetLink(c1, c2)}");
+                Console.WriteLine($"The overall time is {GetLink(t1, c1) + GetLink(c1, c2) + GetLink(c2, t2)}");
+            }
+
+            if (connections == 0
+                && lowest != 100)
+            {
+                Console.WriteLine($"The Shortest route from {t1} to {t2} are as follows:");
+                Console.WriteLine($"Get the train from {t1} to {t2} which takes {GetLink(t1, t2)} minutes in total");
+            }
+            
         }
 
         
